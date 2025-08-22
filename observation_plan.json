@@ -5,21 +5,21 @@
       {
         "visit_number": 1,
         "months_after_treatment": 3,
-        "visit_type": "Плановый осмотр + УЗИ",
+        "visit_type": "Плановый осмотр + обследования",
         "examinations": [
           {
             "code": "B04.027.001",
-            "description": "Диспансерный прием врача-онколога",
+            "description": "Диспансерный прием (осмотр, консультация) врача-онколога",
             "is_mandatory": true
           },
           {
             "code": "A04.06.002",
-            "description": "УЗИ регионарных лимфоузлов",
+            "description": "УЗИ шейных и надключичных лимфоузлов",
             "is_mandatory": true
           },
           {
             "code": "A06.09.005",
-            "description": "КТ органов грудной клетки",
+            "description": "Компьютерная томография органов грудной клетки",
             "is_mandatory": true
           }
         ]
@@ -27,21 +27,21 @@
       {
         "visit_number": 2,
         "months_after_treatment": 6,
-        "visit_type": "Плановый осмотр + онкомаркеры",
+        "visit_type": "Плановый осмотр + обследования",
         "examinations": [
           {
             "code": "B04.027.001",
-            "description": "Диспансерный прием врача-онколога",
+            "description": "Диспансерный прием (осмотр, консультация) врача-онколога",
             "is_mandatory": true
           },
           {
             "code": "A04.06.002",
-            "description": "УЗИ регионарных лимфоузлов",
+            "description": "УЗИ шейных и надключичных лимфоузлов",
             "is_mandatory": true
           },
           {
-            "code": "A09.05.203",
-            "description": "Анализ крови на онкомаркеры (SCC, РЭА)",
+            "code": "A06.09.005",
+            "description": "Компьютерная томография органов грудной клетки",
             "is_mandatory": true
           }
         ]
@@ -49,16 +49,21 @@
       {
         "visit_number": 3,
         "months_after_treatment": 9,
-        "visit_type": "Контрольный осмотр",
+        "visit_type": "Плановый осмотр + обследования",
         "examinations": [
           {
             "code": "B04.027.001",
-            "description": "Диспансерный прием врача-онколога",
+            "description": "Диспансерный прием (осмотр, консультация) врача-онколога",
             "is_mandatory": true
           },
           {
             "code": "A04.06.002",
-            "description": "УЗИ регионарных лимфоузлов",
+            "description": "УЗИ шейных и надключичных лимфоузлов",
+            "is_mandatory": true
+          },
+          {
+            "code": "A06.09.005",
+            "description": "Компьютерная томография органов грудной клетки",
             "is_mandatory": true
           }
         ]
@@ -66,118 +71,21 @@
       {
         "visit_number": 4,
         "months_after_treatment": 12,
-        "visit_type": "Расширенное обследование (годовой контроль)",
+        "visit_type": "Годовой контроль + расширенное обследование",
         "examinations": [
           {
             "code": "B04.027.001",
-            "description": "Диспансерный прием врача-онколога",
+            "description": "Диспансерный прием (осмотр, консультация) врача-онколога",
             "is_mandatory": true
           },
           {
             "code": "A04.06.002",
-            "description": "УЗИ регионарных лимфоузлов",
+            "description": "УЗИ шейных и надключичных лимфоузлов",
             "is_mandatory": true
           },
           {
             "code": "A06.09.005",
-            "description": "КТ органов грудной клетки",
-            "is_mandatory": true
-          },
-          {
-            "code": "A05.23.009",
-            "description": "МРТ головного мозга",
-            "is_mandatory": false,
-            "condition": {
-              "type": "stage_in",
-              "value": ["III", "IV"]
-            }
-          },
-          {
-            "code": "A09.05.203",
-            "description": "Анализ крови на онкомаркеры (полный профиль)",
-            "is_mandatory": true
-          }
-        ]
-      },
-      {
-        "visit_number": 5,
-        "months_after_treatment": 18,
-        "visit_type": "Промежуточный контроль",
-        "examinations": [
-          {
-            "code": "B04.027.001",
-            "description": "Диспансерный прием врача-онколога",
-            "is_mandatory": true
-          },
-          {
-            "code": "A04.06.002",
-            "description": "УЗИ регионарных лимфоузлов",
-            "is_mandatory": true
-          }
-        ]
-      },
-      {
-        "visit_number": 6,
-        "months_after_treatment": 24,
-        "visit_type": "Двухлетний контроль",
-        "examinations": [
-          {
-            "code": "B04.027.001",
-            "description": "Диспансерный прием врача-онколога",
-            "is_mandatory": true
-          },
-          {
-            "code": "A04.06.002",
-            "description": "УЗИ регионарных лимфоузлов",
-            "is_mandatory": true
-          },
-          {
-            "code": "A06.09.005",
-            "description": "КТ органов грудной клетки",
-            "is_mandatory": true
-          },
-          {
-            "code": "A09.05.203",
-            "description": "Анализ крови на онкомаркеры",
-            "is_mandatory": true
-          }
-        ]
-      },
-      {
-        "visit_number": 7,
-        "months_after_treatment": 30,
-        "visit_type": "Промежуточный контроль",
-        "examinations": [
-          {
-            "code": "B04.027.001",
-            "description": "Диспансерный прием врача-онколога",
-            "is_mandatory": true
-          },
-          {
-            "code": "A04.06.002",
-            "description": "УЗИ регионарных лимфоузлов",
-            "is_mandatory": true
-          }
-        ]
-      },
-      {
-        "visit_number": 8,
-        "months_after_treatment": 36,
-        "visit_type": "Трехлетний расширенный контроль",
-        "examinations": [
-          {
-            "code": "B04.027.001",
-            "description": "Диспансерный прием врача-онколога",
-            "is_mandatory": true
-          },
-          {
-            "code": "A04.06.002",
-            "description": "УЗИ регионарных лимфоузлов",
-            "is_mandatory": true
-          },
-          {
-            "code": "A06.09.005",
-            "description": "КТ органов грудной клетки",
+            "description": "Компьютерная томография органов грудной клетки",
             "is_mandatory": true
           },
           {
@@ -197,11 +105,218 @@
               "type": "stage_in",
               "value": ["III", "IV"]
             }
+          }
+        ]
+      },
+      {
+        "visit_number": 5,
+        "months_after_treatment": 15,
+        "visit_type": "Плановый осмотр + обследования",
+        "examinations": [
+          {
+            "code": "B04.027.001",
+            "description": "Диспансерный прием (осмотр, консультация) врача-онколога",
+            "is_mandatory": true
           },
           {
-            "code": "A09.05.203",
-            "description": "Анализ крови на онкомаркеры (полный профиль)",
+            "code": "A04.06.002",
+            "description": "УЗИ шейных и надключичных лимфоузлов",
             "is_mandatory": true
+          },
+          {
+            "code": "A06.09.005",
+            "description": "Компьютерная томография органов грудной клетки",
+            "is_mandatory": true
+          }
+        ]
+      },
+      {
+        "visit_number": 6,
+        "months_after_treatment": 18,
+        "visit_type": "Плановый осмотр + обследования",
+        "examinations": [
+          {
+            "code": "B04.027.001",
+            "description": "Диспансерный прием (осмотр, консультация) врача-онколога",
+            "is_mandatory": true
+          },
+          {
+            "code": "A04.06.002",
+            "description": "УЗИ шейных и надключичных лимфоузлов",
+            "is_mandatory": true
+          },
+          {
+            "code": "A06.09.005",
+            "description": "Компьютерная томография органов грудной клетки",
+            "is_mandatory": true
+          }
+        ]
+      },
+      {
+        "visit_number": 7,
+        "months_after_treatment": 21,
+        "visit_type": "Плановый осмотр + обследования",
+        "examinations": [
+          {
+            "code": "B04.027.001",
+            "description": "Диспансерный прием (осмотр, консультация) врача-онколога",
+            "is_mandatory": true
+          },
+          {
+            "code": "A04.06.002",
+            "description": "УЗИ шейных и надключичных лимфоузлов",
+            "is_mandatory": true
+          },
+          {
+            "code": "A06.09.005",
+            "description": "Компьютерная томография органов грудной клетки",
+            "is_mandatory": true
+          }
+        ]
+      },
+      {
+        "visit_number": 8,
+        "months_after_treatment": 24,
+        "visit_type": "Двухлетний контроль + расширенное обследование",
+        "examinations": [
+          {
+            "code": "B04.027.001",
+            "description": "Диспансерный прием (осмотр, консультация) врача-онколога",
+            "is_mandatory": true
+          },
+          {
+            "code": "A04.06.002",
+            "description": "УЗИ шейных и надключичных лимфоузлов",
+            "is_mandatory": true
+          },
+          {
+            "code": "A06.09.005",
+            "description": "Компьютерная томография органов грудной клетки",
+            "is_mandatory": true
+          },
+          {
+            "code": "A05.23.009",
+            "description": "МРТ головного мозга",
+            "is_mandatory": false,
+            "condition": {
+              "type": "stage_in",
+              "value": ["III", "IV"]
+            }
+          },
+          {
+            "code": "A07.03.001.001",
+            "description": "Остеосцинтиграфия",
+            "is_mandatory": false,
+            "condition": {
+              "type": "stage_in",
+              "value": ["III", "IV"]
+            }
+          }
+        ]
+      },
+      {
+        "visit_number": 9,
+        "months_after_treatment": 27,
+        "visit_type": "Плановый осмотр + обследования",
+        "examinations": [
+          {
+            "code": "B04.027.001",
+            "description": "Диспансерный прием (осмотр, консультация) врача-онколога",
+            "is_mandatory": true
+          },
+          {
+            "code": "A04.06.002",
+            "description": "УЗИ шейных и надключичных лимфоузлов",
+            "is_mandatory": true
+          },
+          {
+            "code": "A06.09.005",
+            "description": "Компьютерная томография органов грудной клетки",
+            "is_mandatory": true
+          }
+        ]
+      },
+      {
+        "visit_number": 10,
+        "months_after_treatment": 30,
+        "visit_type": "Плановый осмотр + обследования",
+        "examinations": [
+          {
+            "code": "B04.027.001",
+            "description": "Диспансерный прием (осмотр, консультация) врача-онколога",
+            "is_mandatory": true
+          },
+          {
+            "code": "A04.06.002",
+            "description": "УЗИ шейных и надключичных лимфоузлов",
+            "is_mandatory": true
+          },
+          {
+            "code": "A06.09.005",
+            "description": "Компьютерная томография органов грудной клетки",
+            "is_mandatory": true
+          }
+        ]
+      },
+      {
+        "visit_number": 11,
+        "months_after_treatment": 33,
+        "visit_type": "Плановый осмотр + обследования",
+        "examinations": [
+          {
+            "code": "B04.027.001",
+            "description": "Диспансерный прием (осмотр, консультация) врача-онколога",
+            "is_mandatory": true
+          },
+          {
+            "code": "A04.06.002",
+            "description": "УЗИ шейных и надключичных лимфоузлов",
+            "is_mandatory": true
+          },
+          {
+            "code": "A06.09.005",
+            "description": "Компьютерная томография органов грудной клетки",
+            "is_mandatory": true
+          }
+        ]
+      },
+      {
+        "visit_number": 12,
+        "months_after_treatment": 36,
+        "visit_type": "Трехлетний контроль + расширенное обследование",
+        "examinations": [
+          {
+            "code": "B04.027.001",
+            "description": "Диспансерный прием (осмотр, консультация) врача-онколога",
+            "is_mandatory": true
+          },
+          {
+            "code": "A04.06.002",
+            "description": "УЗИ шейных и надключичных лимфоузлов",
+            "is_mandatory": true
+          },
+          {
+            "code": "A06.09.005",
+            "description": "Компьютерная томография органов грудной клетки",
+            "is_mandatory": true
+          },
+          {
+            "code": "A05.23.009",
+            "description": "МРТ головного мозга",
+            "is_mandatory": false,
+            "condition": {
+              "type": "stage_in",
+              "value": ["III", "IV"]
+            }
+          },
+          {
+            "code": "A07.03.001.001",
+            "description": "Остеосцинтиграфия",
+            "is_mandatory": false,
+            "condition": {
+              "type": "stage_in",
+              "value": ["III", "IV"]
+            }
           }
         ]
       }

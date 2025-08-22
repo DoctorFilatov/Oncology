@@ -27,14 +27,25 @@ class OncologyFollowUpCalculator:
                 if delta_months >= visit['months_after_treatment']:
                     for exam in visit['examinations']:
                         if self._should_prescribe(exam, stage):
-                            results.append({
+                            result_item = {
                                 'visit_number': visit['visit_number'],
                                 'months_after_treatment': visit['months_after_treatment'],
                                 'code': exam['code'],
                                 'description': exam['description'],
                                 'scheduled_date': (treat_date + timedelta(days=30*visit['months_after_treatment'])).strftime('%d.%m.%Y')
-                            })
+                            }
+                            
+                            # Добавляем тип визита и условие если есть
+                            if 'visit_type' in visit:
+                                result_item['visit_type'] = visit['visit_type']
+                            
+                            if 'condition' in exam:
+                                result_item['condition'] = exam['condition']
+                            
+                            results.append(result_item)
             
+            # Сортируем по времени назначения
+            results.sort(key=lambda x: x['months_after_treatment'])
             return results
         except Exception as e:
             raise Exception(f"Ошибка расчета графика: {str(e)}")

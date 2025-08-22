@@ -29,37 +29,41 @@ class OncologyFollowUpCalculator:
             treat_date = datetime.strptime(treatment_date, '%d.%m.%Y')
             curr_date = datetime.strptime(current_date, '%d.%m.%Y')
             
-            results = []
+            visits = []
             
-            for visit in self.plan['observation_plan']['visits']:
+            for visit_plan in self.plan['observation_plan']['visits']:
                 # Рассчитываем дату визита
-                visit_date = treat_date + timedelta(days=30*visit['months_after_treatment'])
+                visit_date = treat_date + timedelta(days=30*visit_plan['months_after_treatment'])
                 
                 # Корректируем на рабочий день если визит в будущем
                 if visit_date > curr_date:
                     visit_date = self.adjust_to_workday(visit_date)
                 
-                # Добавляем визит в результаты, даже если он в будущем
-                for exam in visit['examinations']:
+                # Определяем статус визита (прошедший/будущий)
+                is_past = visit_date < curr_date
+                
+                # Формируем список обследований для этого визита
+                examinations = []
+                for exam in visit_plan['examinations']:
                     if self._should_prescribe(exam, stage):
-                        result_item = {
-                            'visit_number': visit['visit_number'],
-                            'months_after_treatment': visit['months_after_treatment'],
+                        examinations.append({
                             'code': exam['code'],
-                            'description': exam['description'],
-                            'scheduled_date': visit_date.strftime('%d.%m.%Y'),
-                            'is_past': visit_date < curr_date,
-                            'visit_type': visit.get('visit_type', 'Плановый осмотр')
-                        }
-                        
-                        if 'condition' in exam:
-                            result_item['condition'] = exam['condition']
-                        
-                        results.append(result_item)
+                            'description': exam['description']
+                        })
+                
+                # Добавляем визит в результаты
+                visits.append({
+                    'visit_number': visit_plan['visit_number'],
+                    'months_after_treatment': visit_plan['months_after_treatment'],
+                    'scheduled_date': visit_date.strftime('%d.%m.%Y'),
+                    'is_past': is_past,
+                    'visit_type': visit_plan.get('visit_type', 'Плановый осмотр'),
+                    'examinations': examinations
+                })
             
             # Сортируем по времени назначения
-            results.sort(key=lambda x: x['months_after_treatment'])
-            return results
+            visits.sort(key=lambda x: x['months_after_treatment'])
+            return visits
         except Exception as e:
             raise Exception(f"Ошибка расчета графика: {str(e)}")
     

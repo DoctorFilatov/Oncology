@@ -1,0 +1,95 @@
+{
+  "observation_plan": {
+    "plan_name": "Динамическое наблюдение после радикального лечения (Пример для НМРЛ/RМЖ)",
+    "visits": [
+      {
+        "visit_number": 1,
+        "months_after_treatment": 3,
+        "examinations": [
+          {
+            "code": "B04.027.001",
+            "description": "Диспансерный прием (осмотр, консультация) врача-онколога",
+            "is_mandatory": true
+          },
+          {
+            "code": "A04.06.002",
+            "description": "УЗИ шейных и надключичных лимфоузлов",
+            "is_mandatory": true
+          },
+          {
+            "code": "A06.09.005",
+            "description": "Компьютерная томография органов грудной клетки",
+            "is_mandatory": true,
+            "preferred_alternative": true
+          },
+          {
+            "code": "A06.09.007",
+            "description": "Рентгенография органов грудной клетки",
+            "is_mandatory": false,
+            "is_alternative_for": "A06.09.005"
+          }
+        ]
+      },
+      {
+        "visit_number": 2,
+        "months_after_treatment": 6,
+        "examinations": [
+          {
+            "code": "B04.027.001",
+            "description": "Диспансерный прием (осмотр, консультация) врача-онколога",
+            "is_mandatory": true
+          },
+          {
+            "code": "A04.06.002",
+            "description": "УЗИ шейных и надключичных лимфоузлов",
+            "is_mandatory": true
+          },
+          {
+            "code": "A06.09.005",
+            "description": "Компьютерная томография органов грудной клетки",
+            "is_mandatory": true
+          }
+        ]
+      },
+      {
+        "visit_number": 13,
+        "months_after_treatment": 36,
+        "examinations": [
+          {
+            "code": "B04.027.001",
+            "description": "Диспансерный прием (осмотр, консультация) врача-онколога",
+            "is_mandatory": true
+          },
+          {
+            "code": "A04.06.002",
+            "description": "УЗИ шейных и надключичных лимфоузлов",
+            "is_mandatory": true
+          },
+          {
+            "code": "A06.09.005",
+            "description": "Компьютерная томография органов грудной клетки",
+            "is_mandatory": true
+          },
+          {
+            "code": "A05.23.009",
+            "description": "МРТ головного мозга",
+            "is_mandatory": false,
+            "condition": {
+              "type": "stage_in",
+              "value": ["III", "IV"]
+            }
+          },
+          {
+            "code": "A07.03.001.001",
+            "description": "Остеосцинтиграфия",
+            "is_mandatory": false,
+            "condition": {
+              "type": "stage_in",
+              "value": ["III", "IV"]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

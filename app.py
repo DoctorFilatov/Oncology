@@ -1,9 +1,26 @@
 import streamlit as st
 from datetime import datetime
 import os
+import base64
 from calculator import OncologyFollowUpCalculator
+from fpdf import FPDF
+import tempfile
 
-st.set_page_config(page_title="Онкологический план наблюдения", page_icon="🗓️", layout="wide")
+# Настройка страницы
+st.set_page_config(page_title="Oncology Follow-Up Planner", page_icon="🗓️", layout="wide")
+
+# Добавляем водяные знаки через CSS
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='50%25' y='50%25' font-family='Arial' font-size='14' fill='rgba(128,128,128,0.1)' text-anchor='middle' dominant-baseline='middle' transform='rotate(-45, 100, 100)'%3EFilatov%3C/text%3E%3C/svg%3E");
+        background-repeat: repeat;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 # Проверяем наличие необходимых файлов
 if not os.path.exists('observation_plan.json'):
@@ -21,6 +38,60 @@ with col2:
     stage = st.selectbox('Стадия заболевания', ['I', 'II', 'III', 'IV'])
 with col3:
     current_date = st.date_input('Текущая дата', datetime.now())
+
+# Функция для создания PDF
+def create_pdf(visits, treatment_date, stage, current_date):
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.add_font('DejaVu', '', 'DejaVuSans.ttf', uni=True)
+    pdf.set_font('DejaVu', '', 12)
+    
+    # Заголовок
+    pdf.set_font_size(16)
+    pdf.cell(0, 10, 'План динамического наблюдения', 0, 1, 'C')
+    pdf.set_font_size(12)
+    pdf.cell(0, 10, f'Дата лечения: {treatment_date}', 0, 1)
+    pdf.cell(0, 10, f'Стадия: {stage}', 0, 1)
+    pdf.cell(0, 10, f'Сформирован: {current_date}', 0, 1)
+    pdf.ln(10)
+    
+    # Таблица с визитами
+    pdf.set_fill_color(200, 220, 255)
+    pdf.cell(30, 10, 'Визит', 1, 0, 'C', True)
+    pdf.cell(40, 10, 'Дата', 1, 0, 'C', True)
+    pdf.cell(120, 10, 'Обследования', 1, 1, 'C', True)
+    
+    pdf.set_fill_color(255, 255, 255)
+    for visit in visits:
+        # Сокращаем описания обследований
+        exam_list = []
+        for exam in visit['examinations']:
+            short_desc = exam['description']
+            if "Диспансерный прием" in short_desc:
+                short_desc = "Осмотр онколога"
+            elif "Компьютерная томография" in short_desc:
+                short_desc = "КТ грудной клетки"
+            elif "УЗИ регионарных лимфоузлов" in short_desc:
+                short_desc = "УЗИ лимфоузлов"
+            exam_list.append(short_desc)
+        
+        exams_text = ", ".join(exam_list)
+        
+        # Добавляем строку в таблицу
+        status = "✅ " if visit['is_past'] else "🟢 "
+        pdf.cell(30, 10, status + str(visit['visit_number']), 1, 0)
+        pdf.cell(40, 10, visit['scheduled_date'], 1, 0)
+        pdf.multi_cell(120, 10, exams_text, 1, 1)
+    
+    # Водяной знак в PDF
+    pdf.set_font_size(40)
+    pdf.set_text_color(220, 220, 220)
+    pdf.rotate(45)
+    pdf.text(60, 100, "Filatov")
+    pdf.rotate(0)
+    pdf.set_text_color(0, 0, 0)
+    
+    return pdf
 
 if st.button('Сформировать план наблюдения', type="primary"):
     try:
@@ -87,16 +158,31 @@ if st.button('Сформировать план наблюдения', type="pri
             # Сводная информация
             st.success(f"📊 Всего в плане: {len(visits)} визитов. Предстоящих: {len(future_visits)}, завершенных: {len(past_visits)}")
             
-            # Визуальная временная шкала
-            st.markdown("### 📅 Временная шкала наблюдения")
-            timeline_cols = st.columns(min(6, len(visits)))
-            
-            for i, visit in enumerate(visits):
-                if i < 6:  # Ограничиваем количество колонок для визуализации
-                    with timeline_cols[i]:
-                        status = "✅" if visit['is_past'] else "🟢"
-                        st.markdown(f"{status} **Визит {visit['visit_number']}**")
-                        st.caption(visit['scheduled_date'])
+            # Кнопка для выгрузки в PDF
+            if st.button('📄 Выгрузить в PDF'):
+                try:
+                    pdf = create_pdf(visits, treat_str, stage, curr_str)
+                    
+                    # Сохраняем временный файл
+                    with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
+                        pdf.output(tmp_file.name)
+                        
+                        # Читаем файл и создаем кнопку для скачивания
+                        with open(tmp_file.name, "rb") as f:
+                            pdf_bytes = f.read()
+                        
+                        st.download_button(
+                            label="⬇️ Скачать PDF",
+                            data=pdf_bytes,
+                            file_name=f"oncology_plan_{treatment_date.strftime('%Y%m%d')}.pdf",
+                            mime="application/pdf"
+                        )
+                    
+                    # Удаляем временный файл
+                    os.unlink(tmp_file.name)
+                    
+                except Exception as e:
+                    st.error(f"Ошибка при создании PDF: {str(e)}")
             
         else:
             st.info('ℹ️ На текущую дату назначений не найдено.')
@@ -116,12 +202,10 @@ st.sidebar.info("""
 Даты визитов автоматически корректируются на рабочие дни.
 """)
 
-# Отладочная информация
-with st.sidebar.expander("ℹ️ Сокращения обследований"):
-    st.write("""
-    - **Осмотр онколога:** Диспансерный прием врача-онколога
-    - **КТ грудной клетки:** Компьютерная томография органов грудной клетки
-    - **УЗИ лимфоузлов:** УЗИ регионарных лимфоузлов
-    - **МРТ мозга:** МРТ головного мозга
-    - **Онкомаркеры:** Анализ крови на онкомаркеры
-    """)
+# Информация о водяных знаках
+st.sidebar.markdown("---")
+st.sidebar.markdown("""
+<div style="opacity: 0.7; font-size: 0.8em;">
+<p>Приложение разработано с использованием технологии Filatov</p>
+</div>
+""", unsafe_allow_html=True)

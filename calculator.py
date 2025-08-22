@@ -11,6 +11,16 @@ class OncologyFollowUpCalculator:
         except json.JSONDecodeError:
             raise Exception("Ошибка в формате JSON файла")
     
+    def adjust_to_workday(self, date):
+        """Корректирует дату на ближайший рабочий день (понедельник-пятница)"""
+        # Если суббота (5) - переносим на понедельник (+2 дня)
+        if date.weekday() == 5:
+            return date + timedelta(days=2)
+        # Если воскресенье (6) - переносим на понедельник (+1 день)
+        elif date.weekday() == 6:
+            return date + timedelta(days=1)
+        return date
+    
     def calculate_schedule(self, treatment_date, stage, current_date=None):
         try:
             if current_date is None:
@@ -19,30 +29,33 @@ class OncologyFollowUpCalculator:
             treat_date = datetime.strptime(treatment_date, '%d.%m.%Y')
             curr_date = datetime.strptime(current_date, '%d.%m.%Y')
             
-            delta_months = (curr_date.year - treat_date.year) * 12 + (curr_date.month - treat_date.month)
-            
             results = []
             
             for visit in self.plan['observation_plan']['visits']:
-                if delta_months >= visit['months_after_treatment']:
-                    for exam in visit['examinations']:
-                        if self._should_prescribe(exam, stage):
-                            result_item = {
-                                'visit_number': visit['visit_number'],
-                                'months_after_treatment': visit['months_after_treatment'],
-                                'code': exam['code'],
-                                'description': exam['description'],
-                                'scheduled_date': (treat_date + timedelta(days=30*visit['months_after_treatment'])).strftime('%d.%m.%Y')
-                            }
-                            
-                            # Добавляем тип визита и условие если есть
-                            if 'visit_type' in visit:
-                                result_item['visit_type'] = visit['visit_type']
-                            
-                            if 'condition' in exam:
-                                result_item['condition'] = exam['condition']
-                            
-                            results.append(result_item)
+                # Рассчитываем дату визита
+                visit_date = treat_date + timedelta(days=30*visit['months_after_treatment'])
+                
+                # Корректируем на рабочий день если визит в будущем
+                if visit_date > curr_date:
+                    visit_date = self.adjust_to_workday(visit_date)
+                
+                # Добавляем визит в результаты, даже если он в будущем
+                for exam in visit['examinations']:
+                    if self._should_prescribe(exam, stage):
+                        result_item = {
+                            'visit_number': visit['visit_number'],
+                            'months_after_treatment': visit['months_after_treatment'],
+                            'code': exam['code'],
+                            'description': exam['description'],
+                            'scheduled_date': visit_date.strftime('%d.%m.%Y'),
+                            'is_past': visit_date < curr_date,
+                            'visit_type': visit.get('visit_type', 'Плановый осмотр')
+                        }
+                        
+                        if 'condition' in exam:
+                            result_item['condition'] = exam['condition']
+                        
+                        results.append(result_item)
             
             # Сортируем по времени назначения
             results.sort(key=lambda x: x['months_after_treatment'])
